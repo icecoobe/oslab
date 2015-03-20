@@ -1,0 +1,12 @@
+
+# gitignore file list for nasm project
+
+# object format file
+*.com
+*.exe
+*.obj
+
+# temp file
+*.lst
+
+
