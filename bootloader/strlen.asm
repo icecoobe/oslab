@@ -7,28 +7,38 @@ org 7c00h
 org 100h
 %endif
 	
-section .data
-msg db 'Hello here something ...', 0	
-op equ 10h
-op2 equ 1000h
+;; section .data
+	msg db 'Hello here something ...', 0
 
 section .bss
-tmp resw 1
+	length resw 1
+	tmp resw 1
+	
+op equ 10h
+op2 equ 1000h
 
 section .text
 start:
 	xor ax, ax
-	;; mov ds, ax 
-;	mov es, ax
-	
-	;mov ax, 000Eh
-;	int 10h
-	
-	mov ah, 0FH  
-   	int 10H  
 
-    	mov ah, 0  
-	int 10H  
+%ifdef BOOTLOADER	
+	;; mov ds, ax 
+	;; mov es, ax
+%endif
+
+	mov ax, 000Eh
+	int 10h
+	
+	;; CRLF
+	mov al, 0Dh
+	call func_putc
+	mov al, 0Ah
+	call func_putc
+	
+	mov ax, msg
+	call func_strlen
+	call Disp2ByteInHex	
+	
 
 	;; CRLF
 	mov al, 0Dh
@@ -36,50 +46,24 @@ start:
 	mov al, 0Ah
 	call func_putc
 	
-	;; mov ax, msg
-	;; call func_strlen
-
-	
-	mov ax, 3335h
-	call Disp2ByteInHex
-	
-	mov ax, 3335h
-	call Disp2ByteInHex_Reverse
-
-	;; ;; CRLF
-	;; mov al, 0Dh
-	;; call func_putc
-	;; mov al, 0Ah
-	;; call func_putc
-
-%ifdef BOOTLOADER
-	;; ffff0h处只有一句跳转语句
-	;; dosbox中是jmp f000:12c0
-	;; 1.裸机上未实验
-	;; 2.dosbox中会导致重启
-	;; 3.vbox上也会导致无限重启
-	;; jmp 0xffff:0000
-%endif
-	
 	hlt
 	jmp $
 	
 func_strlen:
 	xor di, di
 	xor dx, dx
+	;; mov [length], ax
 	mov bp, ax
 nextchar:
-	mov dl, [bp + di]
-	mov al, dl
-	call func_putc
+	;; add ax, bx
+	mov dl, [bp+di]
 	cmp dl, 0
 	je loopend
 	inc di
-	inc dh
 	loop nextchar
 loopend:
 	xor ax, ax
-	mov al, dh
+	mov ax, di
 	ret 
 
 ;; al
@@ -158,12 +142,6 @@ loopproc:
 loopend2:
 	ret                                                       
 
-
-shutdown:
-	mov  AX,  5307h  
-	mov  BX,  1  
-	mov  CX,  3  
-	int  15h
 
 %ifdef BOOTLOADER	
 times (512-($-$$) - 2)	db 0 

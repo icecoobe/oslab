@@ -24,12 +24,12 @@ org 7c00h
 ;; Q1: 为什么使用了section之类的字样之后, 编译的目标文件大小不为512
 ;; 试一下生成list文件, 看看
 ;; 应该是跟($ - $$)有关系
-;;section .data
+section .data
 	msg db 'Hello World!'
 	crlf db 13,10,'$' ;; 回车换行
 
 ;; Q2: 同Q1
-;;section .text
+section .text
 start:
 	;; 将DS ES与CS保持一致, 指向相同的段
 	;; 在数据操作时候, 能够正确定位到.
