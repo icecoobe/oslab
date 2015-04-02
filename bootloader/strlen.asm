@@ -7,8 +7,6 @@ org 7c00h
 org 100h
 %endif
 	
-;; section .data
-	msg db 'Hello here something ...', 0
 
 section .bss
 	length resw 1
@@ -22,10 +20,12 @@ start:
 	xor ax, ax
 
 %ifdef BOOTLOADER	
-	;; mov ds, ax 
-	;; mov es, ax
+	mov ds, ax 
+	mov es, ax
 %endif
 
+	;; 设置显示模式(可选)
+	;; 看起来很酷的一个模式
 	mov ax, 000Eh
 	int 10h
 	
@@ -34,20 +34,55 @@ start:
 	call func_putc
 	mov al, 0Ah
 	call func_putc
-	
-	mov ax, msg
-	call func_strlen
-	call Disp2ByteInHex	
-	
+
+	;; 打印字符串的地址
+	mov ax, msg		;0x7cae, offset=0xae, 可以结合Hexview证明
+	call Disp2ByteInHex
 
 	;; CRLF
 	mov al, 0Dh
 	call func_putc
 	mov al, 0Ah
 	call func_putc
+
+	;; 打印字符串长度，包含\0
+	mov ax, msg
+	call func_strlen
+	call Disp2ByteInHex
+
+	;; CRLF
+	mov al, 0Dh
+	call func_putc
+	mov al, 0Ah
+	call func_putc
+
+	;; 打印字符串长度，包含\0
+	mov ax, msg
+	call func_strlen_2
+	call Disp2ByteInHex
+	
 	
 	hlt
 	jmp $
+
+func_strlen_2:
+	xor di, di
+	xor dx, dx
+	;; mov [length], ax
+	mov bp, ax
+nextchar_2:
+	;; add ax, bx
+	mov dl, [bp+di]
+	;; mov al, dl
+	;; call func_putc
+	or dl, dl
+	jz loopend_2
+	inc di
+	loop nextchar_2
+loopend_2:
+	xor ax, ax
+	mov ax, di
+	ret
 	
 func_strlen:
 	xor di, di
@@ -58,6 +93,8 @@ nextchar:
 	;; add ax, bx
 	mov dl, [bp+di]
 	cmp dl, 0
+	mov al, dl
+	call func_putc
 	je loopend
 	inc di
 	loop nextchar
@@ -65,7 +102,7 @@ loopend:
 	xor ax, ax
 	mov ax, di
 	ret 
-
+	
 ;; al
 func_putc:
 	mov ah, 0EH     ; 
@@ -143,11 +180,15 @@ loopend2:
 	ret                                                       
 
 
-%ifdef BOOTLOADER	
-times (512-($-$$) - 2)	db 0 
+	
+msg db 'Hello here something ...', 13, 10, 0
+
+%ifdef BOOTLOADER
+times (512-($-$$) - 2)	db 0
+;;; 以下一句会报错，提示非常量赋值给times
+;; times (512-($-start) - 2)	db 0
 ;;size equ $ - start
 ;;%if size+2 >512
 ;;%error "code is too large for boot sector"
-;;%endif
-db   0x55, 0xAA
+db 0x55, 0xAA
 %endif

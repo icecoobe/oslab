@@ -3,10 +3,13 @@
 
 # object format file
 *.com
-*.exe
 *.obj
 
 # temp file
 *.lst
 
-
+# backup files
+*.*~
+*.bak
+*.*.bak
+*.*.swap
