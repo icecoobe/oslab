@@ -60,6 +60,7 @@ start:
 
 %ifdef BOOTLOADER
 	;; ffff0h处只有一句跳转语句
+    ;; 跳转到真正的BIOS启动之处
 	;; dosbox中是jmp f000:12c0
 	;; 1.裸机上未实验
 	;; 2.dosbox中会导致重启
