@@ -13,6 +13,8 @@
 *.bak
 *.*.bak
 *.*.swap
+*.swp
 *.*.swp
+*.*.*.swp
 
 bin/
