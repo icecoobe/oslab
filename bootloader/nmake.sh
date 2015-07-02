@@ -1,4 +1,4 @@
-#!/usr/bin/nodejs
+#!/usr/bin/bash
 
 
 nasm -f bin -o $1 $1.asm
