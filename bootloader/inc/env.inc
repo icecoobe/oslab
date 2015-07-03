@@ -2,7 +2,7 @@
 ;; Set org address for different target
 ;; you should define the target before include this file
 %ifdef BOOTLOADER
-    %define  ORG_ADDRESS 07c0h
+    %define  ORG_ADDRESS 7c00h
 %elifdef DOS
     %define  ORG_ADDRESS 100h
 %else
@@ -28,3 +28,17 @@
         db 0x55, 0xAA
     %endif
 %endmacro
+
+;; 不保留分区表, 填充剩余空间
+%macro FillSpaceLeftWithZeroFor512 0
+	times (512-($-$$) - 2)	db 0 
+%endmacro
+
+;; 保留分区表(DPT), 填充剩余空间
+;; 这个需要保证原先的MBR扇区是有效的引导扇区
+;; 也就是末尾包含引导有效的标识
+%macro FillSpaceLeftWithZeroFor512_KeepDPT 0
+	times (446-($-$$))	db 0 
+%endmacro
+
+
