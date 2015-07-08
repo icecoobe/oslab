@@ -99,4 +99,15 @@ loopendD2BIH:
 	mov ax, 0003H
 	int 10H	
 %endmacro
+
+;; 关闭计算机
+;; 入口参数: 无
+;; 返回值: 无
+%macro shutdown 0
+	mov  ax,  5307h  
+	mov  bx,  1  
+	mov  cx,  3  
+	int  15h
+%endmacro
+
 ;; End of file
