@@ -110,4 +110,36 @@ loopendD2BIH:
 	int  15h
 %endmacro
 
+;; 显示一个字符
+;; 入口参数: 要显示的字符
+;; 返回值: 无
+;; Example:
+;; putc 'a'
+;; putc `\'`
+%macro putc 1
+	mov al, %1
+	mov ah, 0EH     
+	mov bx, 0007H   
+	int 10h
+%endmacro
+
+;; 输入一个字符
+;; 入口参数: 无 
+;; 返回值: al, 输入的字符 
+%macro getc 0
+	mov ah, 0h    
+	int 16h
+%endmacro
+
+%macro puts 2
+	mov ax, %1		;; pointer to string
+	mov bp, ax		;; ES:BP = 串地址
+	mov cx, %2		;; CX = 串长度
+	mov ax, 01301h  ;; AH = 13,  AL = 01h
+	mov bx, 000ch	;; 页号为0(BH = 0) 黑底红字(BL = 0Ch,高亮)
+	mov dh, 5	;; start row
+	mov dl, 0	;; start col
+	int 10h
+%endmacro
+
 ;; End of file
