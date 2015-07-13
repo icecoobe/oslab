@@ -131,7 +131,7 @@ loopendD2BIH:
 	int 16h
 %endmacro
 
-%macro puts 2
+%macro M_puts 2
 	mov ax, %1		;; pointer to string
 	mov bp, ax		;; ES:BP = 串地址
 	mov cx, %2		;; CX = 串长度
