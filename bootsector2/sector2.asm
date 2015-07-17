@@ -3,10 +3,19 @@
 ;; 简单的高斯计算，累加而已
 ;;
 
-org 7c00h
+org 0x6000
 
 %include "inc/io.inc"
-
+	
+xor ax, ax
+mov ds, ax
+mov es, ax
+begin:
+	;;cls ;; some bios does not clear the PCI devices informations left on the screen.
+	mov si, menu
+	call puts
+	putc 13
+	putc 10
 init:
 	getc
 	cmp al, 13
@@ -23,40 +32,36 @@ init:
 	je Start
 	cmp al, 'e'
 	je .PowerOff
+	cmp al, 'r'
+	je .Reset
 	cmp al, 'v'
 	je .Version
 	cmp al, 'c'
 	je .Clear
+	cmp al, 'm'
+	je .Menu
 	jmp init
 .PowerOff:
 	shutdown
 .Clear:
 	cls
-	jmp init
+	jmp init:
 .Version:
 	call ShowVersion
 	jmp init
-
+.Reset:
+	jmp 0xFFFF:0000
+.Menu:
+	mov si, menu
+	call puts
+	jmp init
 
 DECLARE_IO_API
 
 section .text
 Start:
-	cls
-	call ShowVersion
-	mov ax, version
-	call func_strlen
-	mov dx, ax
-	puts version, dx
-	mov ax, hr
-	call func_strlen
-	mov dx, ax
-	puts hr, dx
-
-	mov al, 's'
-	call func_putc
-	mov al, '2'
-	call func_putc
+;;	cls
+	
 	mov ax, 1 ;; operand
 	mov dx, 0 ;; sum
 	mov cx, 100
@@ -69,18 +74,23 @@ ADD:
 PrintResult:
 	mov si, msg
 	call puts
-
+ 
 	mov ax, dx
 	call Disp2ByteInHex
 	
+	mov si, crlf
+	call puts
+
 End:
-	jmp $
+	jmp begin
+	;jmp $
 ;; ----------------------------------------------------------------------
 
-msg db '1+2+3+4+...+100='
+msg db '1+2+...+100='
 crlf db 13, 10, 0
 hr db '------------------------------------------------------------', 13, 10, 0
 version db 'Bootloader 0.1 by icecoobe', 13, 10, 0
+menu db `1).m:this menu\r\n2).s:start\r\n3).e:poweroff\r\n4).r:Reset\r\n5).c:clear screen\r\n6).v:version`, 13, 10, 0
 ;; ----------------------------------------------------------------------
 
 ShowVersion:
@@ -88,8 +98,8 @@ ShowVersion:
 	call puts
 	mov si, version
 	call puts
-	;mov si, hr
-	;call puts
+	mov si, hr
+	call puts
 	ret
 
 func_strlen:
@@ -110,5 +120,5 @@ func_strlen:
 	mov ax, di
 	ret 
 
-times (512-($-$$) - 2)	db 0 
-db   0x55, 0xAA          ;2 byte boot signature
+times (512-($-$$))	db 0 
+;db   0x55, 0xAA          ;2 byte boot signature
