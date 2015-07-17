@@ -3,7 +3,7 @@
 ;; 简单的高斯计算，累加而已
 ;;
 
-org 7c00h
+org 0x6000
 
 %include "inc/io.inc"
 	
@@ -15,8 +15,7 @@ begin:
 	mov si, menu
 	call puts
 	putc 13
-putc 10
-putc 'I'
+	putc 10
 init:
 	getc
 	cmp al, 13
@@ -46,7 +45,7 @@ init:
 	shutdown
 .Clear:
 	cls
-	jmp init
+	jmp init:
 .Version:
 	call ShowVersion
 	jmp init
@@ -87,7 +86,7 @@ End:
 	;jmp $
 ;; ----------------------------------------------------------------------
 
-msg db '1+2+3+4+...+100='
+msg db '1+2+...+100='
 crlf db 13, 10, 0
 hr db '------------------------------------------------------------', 13, 10, 0
 version db 'Bootloader 0.1 by icecoobe', 13, 10, 0
@@ -121,5 +120,5 @@ func_strlen:
 	mov ax, di
 	ret 
 
-;times (512-($-$$) - 2)	db 0 
+times (512-($-$$))	db 0 
 ;db   0x55, 0xAA          ;2 byte boot signature

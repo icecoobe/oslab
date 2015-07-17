@@ -20,26 +20,42 @@ start:
 	call puts
 	call CheckExtInt13H
 
+	mov si, msgPrompt
+	call puts
 	getc
 	
+	mov si, msgLoadingSector
+	call puts
+
 	;xor ax, ax	
-	mov ax, 8000
+	mov ax, 0x8000
 	mov es, ax
 	mov bx, 0
 	call Read
-	mov ax, 8000
+
+	mov si, msgMove
+	call puts
+
+	mov ax, 0x8000
 	mov ds, ax
 	xor si, si
 
 	mov ax, 0
 	mov es, ax
-	mov di, 0x7c00
+	mov di, 0x6000
 
-	mov cx, 446
+	mov cx, 512
 	rep movsb
-	mov ax, 0
-	mov cs, ax
-	jmp 7c00h
+
+	mov si, msgDone
+	call puts
+
+	mov si, msgInvoke
+	call puts
+
+	;;mov ax, 0
+	;;mov cs, ax
+	jmp 0000:0x6000
 
 
 end:
@@ -77,10 +93,15 @@ Read: ;; the 0,0,2 sector
 ;; NOTE: for bootloader, binary format object
 ;; donot use section .data, this will make wrong object size
 ;; refer to $ and $$
-msg db 'Hello World!', 13, 10, 0
-msgSurpportExtInt13H db 'Surpport extended int 13h!', 13, 10, 0
-msgNoturpportExtInt13H db 'Not Surpport extended int 13h!', 13, 10, 0
+msg db 'Checking HD Controller ...', 13, 10, 0
+msgSurpportExtInt13H db 'Surpport extended functions!', 13, 10, 0
+msgNoturpportExtInt13H db 'Not Surpport extended functions!', 13, 10, 0
+msgPrompt db 'Input any char to continue >> ', 13, 10, 0
+msgLoadingSector db 'Loading sector-1 ...', 13, 10, 0
 msgProgramEnd db 'Program terminated.', 13, 10, 0
+msgMove db 'Moving to 0x6000', 13, 10, 0
+msgDone db 'Done!', 13, 10, 0
+msgInvoke db 'Invoking sector-1 ...', 13, 10, 0
 crlf db 13, 10
 
 ;; Footer of bootloader
