@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 
 
 nasm -f bin -o bin/$1.bin $1.asm
