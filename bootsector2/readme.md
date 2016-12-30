@@ -1,10 +1,8 @@
 
 Boot sector-2
-===========
-
 We did practices on stage-1: MBR code for a long time. Now it's time to move on.
 
-This demo is a beginning where we will try to load data and programs into RAM. After that, we will hand the control to the loaded programs. Just like a stage2-bootblock program.
+This demo is a beginning where we will try to load data and programs into RAM. After that, we will hand the control to the loaded programs. Just like a stage2-bootblock progsdsd
 
 ## What does this  project do?
 This project contains two parts: boot.asm and sector2.asm.
