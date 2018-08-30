@@ -8,4 +8,4 @@
 
 ${name}:${name}.asm
 	@echo Building ${name}.asm
-	nasm -f bin -o bin/${name} -l bin/${name}.lst ${name}.asm
+	nasm -f bin -o bin/${name} -l bin/${name}.lst ${name}.asm -Iinc

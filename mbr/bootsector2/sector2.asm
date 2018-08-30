@@ -45,7 +45,7 @@ init:
 	shutdown
 .Clear:
 	cls
-	jmp init:
+	jmp init
 .Version:
 	call ShowVersion
 	jmp init

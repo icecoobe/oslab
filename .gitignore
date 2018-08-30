@@ -18,3 +18,6 @@
 *.*.*.swp
 
 bin/
+
+# Mac OS temp files
+.DS_Store
