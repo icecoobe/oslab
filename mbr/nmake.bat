@@ -1,10 +1,31 @@
 
 @echo off
 
-nasm -f bin -o bin\%1.bin %1.asm
+rem Preparing
+if not exist bin (
+    mkdir bin
+)
 
-rem .\bin\mbr bin\%1.bin
-bin\dd if=bin\%1.bin of="G:\VirtualBox VMs\dos2\dos2.vhd" bs=512 count=1 conv=notrunc
+if not exist bin\bochsrc.bxrc (
+    xcopy /Y ..\template\bochsrc.bxrc bin\
+    xcopy /E /Y ..\template\bxshare bin\bxshare\
+)
 
+cd bin
+if not exist system.img (
+    :: Create a 10MB-HD image named "system.img" which will be used by bochsrc.bxrc
+    bximage -mode=create -hd=10 -q system.img
+)
 
-vboxmanage startvm dos2
+:: Remove temp files which may prevent starting a new bochs instance
+del /s /q system.img.lock
+
+:: Build
+nasm -f bin -o %1.bin -l %1.lst ..\%1.asm
+
+dd if=%1.bin of=system.img bs=512 count=1
+
+:: Run
+bochs -q -f bochsrc.bxrc
+
+cd ..
