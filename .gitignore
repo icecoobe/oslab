@@ -4,6 +4,8 @@
 # object format file
 *.com
 *.obj
+*.bin
+*.img
 
 # temp file
 *.lst
