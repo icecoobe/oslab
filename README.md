@@ -1,6 +1,16 @@
 oslab
 =====
-Preparation and practices on OS development.
+
+## Introduction
+> I must Create a System, or be enslav'd by another Man's; I will not Reason and Compare: my business is to Create. —William Blake
+
+In the early days, engineers knew everything about computing systems: mainboard, hardware, networking, compiler and so on.
+I still have many questions on computing systems even as a graduated student of CS.
+
+After reading the interesting book - [The Elements of Computing Systems][e], I was inspired to write something from scratch.
+This repo. records the practices on OS development.
+
+*I wrote a real-mode program that can handle an old hardware, registered my own interrupt service routine, and configured the interrupts in `Intel 8259A`. And it worked. Due to some reason, I can not put it here, if you are interested in how interrupt stuffs work, ping me.*
 
 ## Links
 - [MikeOS][a]
@@ -96,3 +106,4 @@ Hope these will help you.
 [b]:http://wiki.osdev.org/Main_Page
 [c]:http://www.jamesmolloy.co.uk/tutorial_html/index.html
 [d]:http://www.osdever.net/bkerndev/Docs/intro.htm
+[e]:https://mitpress.mit.edu/books/elements-computing-systems
