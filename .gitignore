@@ -4,6 +4,8 @@
 # object format file
 *.com
 *.obj
+*.bin
+*.img
 
 # temp file
 *.lst
@@ -21,3 +23,6 @@ bin/
 
 # Mac OS temp files
 .DS_Store
+
+# vscode temp files
+.vscode/

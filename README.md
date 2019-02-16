@@ -1,62 +1,109 @@
-# Nasm - Netwide ...
+oslab
+=====
 
+## Introduction
+> I must Create a System, or be enslav'd by another Man's; I will not Reason and Compare: my business is to Create. —William Blake
+
+In the early days, engineers knew everything about computing systems: mainboard, hardware, networking, compiler and so on.
+I still have many questions on computing systems even as a graduated student of CS.
+
+After reading the interesting book - [The Elements of Computing Systems][e], I was inspired to write something from scratch.
+This repo. records the practices on OS development.
+
+*I wrote a real-mode program that can handle an old hardware, registered my own interrupt service routine, and configured the interrupts in `Intel 8259A`. And it worked. Due to some reason, I can not put it here, if you are interested in how interrupt stuffs work, ping me.*
+
+## Links
+- [MikeOS][a]
+- [OSDev][b]
+- [JamesM's kernel development tutorials][c]
+- [Bran's Kernel Development][d]
+
+## Assembler
+[NASM][1] provides some useful features that are similar to C language.
+You can define macro, trace compilation with `%warning`, and memory model is easy understood.
+
+``` Assembly
+;; macro of variable
+%define BASE 0x7C00
+
+;; constant
+mbr_length equ 512
+
+;; I hate LEA
+mov byte [es:xx], XXXh
+
+;; like pointer in C
+mov si, msg
+mov word target, 0x7E00
+jmp [target] 
+
+msg     db 'Hello World'
+target  dw 0x0
+
+;; compilation trick
+size equ ($ - start)
+%if size+2 > 512
+    %error "[ERROR] code is too large for boot sector"
+%else
+    %warning Nasm version: __NASM_VER__
+    %warning Current date: __DATE__ __TIME__
+    %warning Current bits mode: __BITS__
+%endif
+```
 
 ## Editor
-- Emacs
-- Vim
-- Sublime
-- Radasm (Windows)
-- Whatever you feel comfortable with.
+[Visual Studio Code][2] is good for me with useful extensions:
+- [x86 and x86_64 Assembly][3]
+- [hexdump for VSCode][4]
+
+With these extensions, integrated terminal and the following `nmake.sh`(or `nmake.bat`), I could just focus on editor and coding.
 
 ## Emulator
-- VirtualBox
-- DosBox
-Mainly for dos program, you can debug your *.COM file with debug.exe
+- VirtualBox: best performance and fully support for running os.
+- DOSBox or DOSEmu: useful for dos program, you can debug your *.COM file with debug.exe
 - QEMU
-- Bochs
-It's useful for debugging. However, you shouldn't expect the performance.
+- Bochs: It's useful for debugging. However, you shouldn't expect the performance.
 
-## Build && Run
-- Use nmake.sh
->	$ cd bootloader
->	$ sh ./nmake.sh gos
+## Build & Run
+### Use `nmake.sh`
 
-It's fully automatic. After building, the vm will start.
+```
+cd bootloader
+./nmake.sh gos
+```
 
-- Makefile
->	$ cd bootloader
->	$ make name=gos
->	$ cd bin
->	$ ~/c/mbr gos
->	$ vboxmanage startvm dos2
+After building, the emulator will start automatically.
 
-Assume we have a vm named "dos2", and the mbr program(I put it under ~/c) will write gos into vhd of dos2.
-You can change the mbr source code to meet your needs.
+### Makefile
+Recently I was working with `nmake.sh`, later I will improve the Makefile.
 
-## 文件夹说明
-1.bootloader
-以bootloader的形式来运行我们的16位实模式程序。可以采用virtualbox虚拟机作为运行环境，也可以刻录到u盘的引导扇区，在真机上进行实验。
-[注]
-*大部分的引导程序稍经调整，或者使用编译技巧，均可以在dosbox环境下使用。
-引导程序无非几个要求，大小不能超过512字节，511和512字节处为55AA，
-不能使用dos中断等。*
+``` Shell
+cd bootloader
+make name=gos
+cd bin
+```
 
-2.Build
-编译使用的相关脚本
+## Screenshot
+![Gauss calculation][5]
+![][6]
+![][7]
+![][8]
 
-3.Program Segment Prefix
-玩过DOS的都应该知道的，简称psp的玩意。参见内部的readme
+---------------------------------------------
 
-4.QA
-问题和感悟的记录
+Hope these will help you.
 
-5.Shift
-移位操作的代码
+[1]:https://nasm.us
+[2]:https://code.visualstudio.com/
+[3]:https://marketplace.visualstudio.com/items?itemName=13xforever.language-x86-64-assembly
+[4]:https://marketplace.visualstudio.com/items?itemName=slevesque.vscode-hexdump
+[5]:https://raw.githubusercontent.com/icecoobe/oslab/master/screenshots/gauss.png
+[6]:https://raw.githubusercontent.com/icecoobe/oslab/master/screenshots/vram.gif
+[7]:https://raw.githubusercontent.com/icecoobe/oslab/master/screenshots/rect_msg.png
+[8]:https://raw.githubusercontent.com/icecoobe/oslab/master/screenshots/loader-1.png
 
-6.Template
-nasm能够支持的文件格式的模板，也会包含常见的程序模板
-
-7.Tools
-开发中可能会使用到的工具，它们都很实用。
-改写vbox磁盘文件的工具mbr的代码就在该文件夹下。
-mbr也就是nmake.sh中使用的一个工具
+[a]:http://mikeos.sourceforge.net/
+[b]:http://wiki.osdev.org/Main_Page
+[c]:http://www.jamesmolloy.co.uk/tutorial_html/index.html
+[d]:http://www.osdever.net/bkerndev/Docs/intro.htm
+[e]:https://mitpress.mit.edu/books/elements-computing-systems
