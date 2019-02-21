@@ -5,7 +5,7 @@ if not exist bin (
     mkdir bin
 )
 
-nasm -f bin loader-1.asm -o bin\loader-1.bin -l bin\loader-1.lst
+nasm -f bin loader.asm -o bin\loader.bin -l bin\loader.lst
 nasm -f bin -o bin\user.bin user_program.asm -l bin\user.lst
 
 if not exist bin\bochsrc.bxrc (
@@ -19,7 +19,7 @@ if not exist system.img (
     bximage -mode=create -hd=10 -q system.img
 )
 
-dd if=loader-1.bin of=system.img seek=0 bs=512 count=1
+dd if=loader.bin of=system.img seek=0 bs=512 count=1
 dd if=user.bin  of=system.img seek=5 bs=512 count=2
 
 :: Remove temp files which may prevent starting a new bochs instance
