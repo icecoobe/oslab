@@ -1,0 +1,23 @@
+
+# how much memory the emulated machine will have
+megs: 32
+
+# filename of ROM images
+romimage: file=$BXSHARE/BIOS-bochs-latest
+vgaromimage: file=$BXSHARE/VGABIOS-lgpl-latest
+
+# hard disk
+ata0-master: type=disk, path="system.img", mode=flat
+
+# choose the boot disk.
+boot: disk
+
+# where do we send log messages?
+log: bochsout.txt
+
+# disable the mouse, since we are in text only mode
+mouse: enabled=0
+
+# set up IPS value and clock sync
+cpu: ips=15000000
+clock: sync=both

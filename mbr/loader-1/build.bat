@@ -8,8 +8,8 @@ if not exist bin (
 nasm -f bin loader.asm -o bin\loader.bin -l bin\loader.lst
 nasm -f bin -o bin\user.bin user_program.asm -l bin\user.lst
 
-if not exist bin\bochsrc.bxrc (
-    xcopy /Y bochsrc.bxrc bin\
+if not exist bin\bochsrc.win (
+    xcopy /Y bochsrc.win bin\
     xcopy /E /Y bxshare bin\bxshare\
 )
 
@@ -26,6 +26,6 @@ dd if=user.bin  of=system.img seek=5 bs=512 count=2
 del /s /q system.img.lock
 
 rem for debugging
-rem bochsdbg -q -f bochsrc.bxrc
-bochs -q -f bochsrc.bxrc
+rem bochsdbg -q -f bochsrc.win
+bochs -q -f bochsrc.win
 cd ..

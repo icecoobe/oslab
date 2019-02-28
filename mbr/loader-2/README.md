@@ -2,6 +2,8 @@ Loader-2
 ========
 
 2st generation user program loader.
+use int13 Ext to support USB disk operation.
+
 Demostrating how relocation works.
 
 ## Screenshot

@@ -10,7 +10,7 @@ if not exist bin (
 nasm -f bin -o bin\%1.bin -l bin\%1.lst %1.asm
 
 if not exist bin\bochsrc.bxrc (
-    xcopy /Y ..\template\bochsrc.bxrc bin\
+    xcopy /Y ..\template\bochsrc.win bin\
     xcopy /E /Y ..\template\bxshare bin\bxshare\
 )
 
@@ -26,6 +26,6 @@ del /s /q system.img.lock
 dd if=%1.bin of=system.img bs=512 count=1
 
 :: Run
-bochs -q -f bochsrc.bxrc
+bochs -q -f bochsrc.win
 
 cd ..
