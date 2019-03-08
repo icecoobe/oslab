@@ -22,8 +22,10 @@ if not exist system.img (
 dd if=loader.bin of=system.img seek=0 bs=512 count=1
 dd if=user.bin  of=system.img seek=5 bs=512 count=2
 
-:: Remove temp files which may prevent starting a new bochs instance
-del /s /q system.img.lock
+if exist system.img.lock (
+    :: Remove temp files which may prevent starting a new bochs instance
+    del /s /q system.img.lock
+)
 
 rem for debugging
 rem bochsdbg -q -f bochsrc.win

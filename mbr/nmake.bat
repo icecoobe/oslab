@@ -20,8 +20,10 @@ if not exist system.img (
     bximage -mode=create -hd=10 -q system.img
 )
 
-:: Remove temp files which may prevent starting a new bochs instance
-del /s /q system.img.lock
+if exist system.img.lock (
+    :: Remove temp files which may prevent starting a new bochs instance
+    del /s /q system.img.lock
+)
 
 dd if=%1.bin of=system.img bs=512 count=1
 
