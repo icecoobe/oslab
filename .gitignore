@@ -24,5 +24,6 @@ bin/
 # Mac OS temp files
 .DS_Store
 
-# vscode temp files
+# vscode/visual studio temp files
+.vs/
 .vscode/
