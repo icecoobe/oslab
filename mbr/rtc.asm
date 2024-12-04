@@ -45,6 +45,7 @@ Start:
 	mov si, split
 	call puts
 
+	jmp Start
 End:
 	hlt
 	jmp $
