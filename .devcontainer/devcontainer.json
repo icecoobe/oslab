@@ -29,7 +29,12 @@
 	"name": "Local Dockerfile",
 	"build": {
 		"context": "..",
-		"dockerfile": "../Dockerfile"
+		"dockerfile": "Dockerfile",
+		"args": {
+            "HTTP_PROXY": "http://host.docker.internal:3128",
+            "HTTPS_PROXY": "http://host.docker.internal:3128",
+            "NO_PROXY": "localhost,127.0.0.1"
+        }
 	},
 	"customizations": {
 		"vscode": {
