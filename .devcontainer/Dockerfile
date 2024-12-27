@@ -8,6 +8,14 @@ LABEL Name=oslab \
 
 ENV HOSTNAME=docker-oslab
 
+ENV MY_PROXY_URL=http://host.docker.internal:3128
+ENV HTTP_PROXY=$MY_PROXY_URL \
+    HTTPS_PROXY=$MY_PROXY_URL \
+    FTP_PROXY=$MY_PROXY_URL \
+    http_proxy=$MY_PROXY_URL \
+    https_proxy=$MY_PROXY_URL \
+    ftp_proxy=$MY_PROXY_URL
+
 RUN apt-get -y update && apt install -y \
     build-essential \
     bison \
