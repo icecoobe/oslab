@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 if [ ! -d bin ]
 then
 	mkdir -v bin
@@ -13,7 +15,7 @@ cd bin
 
 if [ ! -e system.img ]
 then
-        bximage -mode=create -hd=10 -q system.img
+        bximage -func=create -hd=10 -q system.img
 fi
 
 dd if=$1.bin of=system.img seek=0 bs=512 count=1 conv=notrunc
